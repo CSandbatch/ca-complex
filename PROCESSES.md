@@ -61,3 +61,32 @@ When an app builder that emits a contract-governed document changes:
 5. Sweep consumers (apps that read the contract) and confirm they still
    validate or are updated in the same change.
 6. Material change → issue + ADR + maintainer approval.
+
+## Concurrent installs (multi-agent or multi-terminal)
+
+npm workspaces share one root lockfile and one `node_modules/`; concurrent
+`npm install` runs can corrupt both. Serialize with the mkdir mutex — mkdir
+is atomic, so exactly one holder wins:
+
+```sh
+until mkdir .install-lock 2>/dev/null; do sleep 5; done
+npm install
+rmdir .install-lock   # ALWAYS release, even on failure
+```
+
+A stale `.install-lock` with no install running is a crash leftover — remove
+it.
+
+## Fresh-clone verification (release-grade proof)
+
+The strongest check this repo has: prove it works from nothing but the
+remote. Run before claiming a release-worthy state:
+
+1. `git clone <repo> <short-path>` — on Windows use a SHORT path
+   (`C:\t\cs`): Turbopack sourcemap filenames exceed MAX_PATH in deep
+   folders.
+2. `npm ci`
+3. `npm run check` — read the exit code bare; never pipe a gate.
+
+This gate caught the line-ending drift that per-workspace gates structurally
+could not (they never see a foreign checkout).
