@@ -1,0 +1,11 @@
+# Deterministic checkouts: LF in the working tree on every platform.
+# The tokens drift gate byte-compares files; line endings must be stable.
+* text=auto eol=lf
+
+# Binaries
+*.png binary
+*.jpg binary
+*.ico binary
+*.zip binary
+*.woff binary
+*.woff2 binary

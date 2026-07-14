@@ -57,7 +57,10 @@ for (const target of targets) {
       continue;
     }
     const actual = fs.readFileSync(target, "utf8");
-    if (actual !== expected) {
+    // Compare newline-insensitively: git checkout may rewrite line endings
+    // depending on platform config, and that must never read as palette drift.
+    const norm = (s) => s.replace(/\r\n/g, "\n");
+    if (norm(actual) !== norm(expected)) {
       failures += 1;
       console.error(`drift: ${path.relative(root, target)} differs from source`);
     } else {
