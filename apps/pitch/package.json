@@ -1,0 +1,7 @@
+{
+  "name": "@ca/pitch",
+  "private": true,
+  "scripts": {
+    "check": "node ../../scripts/check-static.mjs apps/pitch"
+  }
+}
