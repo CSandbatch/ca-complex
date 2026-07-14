@@ -1,0 +1,17 @@
+digraph item_types {
+  rankdir=TB;
+  graph [fontname="Helvetica" fontsize=13 bgcolor="#ffffff" pad=0.4 label="Signal Atlas - What A Card Can Be" labelloc="t"];
+  node [fontname="Helvetica" fontsize=10 style=filled color="#333333" shape=box];
+  edge [fontname="Helvetica" fontsize=9 color="#555555"];
+
+  source [label="Source card\nA piece of writing or reporting\nwith title, summary, source,\ntime, and place" fillcolor="#DBEAFE"];
+  event [label="Event card\nA local happening with title,\nvenue/place, time, status,\nand participants when present" fillcolor="#D1FAE5"];
+  listing [label="Listing card\nA practical offer or ask.\nSupported by taxonomy today,\nlightly populated in runtime now" fillcolor="#FEF3C7"];
+  mixtape [label="Mixtape card\nA curated set of Sources + Events\nshown as one square preview card" fillcolor="#EDE0F5"];
+  shared [label="Shared product rules\nplaceKey drives geography\nwindow drives time filters\ncards stay previews, not full pages" shape=note fillcolor="#F5F5F5"];
+
+  source -> shared [style=dashed];
+  event -> shared [style=dashed];
+  listing -> shared [style=dashed];
+  mixtape -> shared [style=dashed];
+}

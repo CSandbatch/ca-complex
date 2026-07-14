@@ -1,0 +1,19 @@
+digraph place_system {
+  rankdir=LR;
+  graph [fontname="Helvetica" fontsize=13 bgcolor="#ffffff" pad=0.4 label="Signal Atlas - Place Is The Shared Coordinate System" labelloc="t"];
+  node [fontname="Helvetica" fontsize=10 style=filled color="#333333" shape=box];
+  edge [fontname="Helvetica" fontsize=9 color="#555555"];
+
+  placekey [label="placeKey\ncanonical slug such as\nbywater, frenchman, cbd" fillcolor="#F5F5F5"];
+  map [label="Map\nmarkers, polygons,\nfocus state, place pressure" fillcolor="#D1FAE5"];
+  cards [label="Cards\nbadges, venue/place labels,\nlinked context" fillcolor="#DBEAFE"];
+  rail [label="Classifieds + Mixtapes\ncan still be organized\nby the same locality spine" fillcolor="#FEF3C7"];
+  user [label="User understanding\nwhere things are happening\nand why they belong together" shape=ellipse fillcolor="#EDE0F5"];
+
+  placekey -> map;
+  placekey -> cards;
+  placekey -> rail;
+  map -> user;
+  cards -> user;
+  rail -> user;
+}

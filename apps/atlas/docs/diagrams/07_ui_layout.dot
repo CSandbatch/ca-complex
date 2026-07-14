@@ -1,0 +1,30 @@
+digraph ui_layout {
+  rankdir=TB;
+  graph [fontname="Helvetica" fontsize=13 bgcolor="#ffffff" pad=0.4 label="Signal Atlas - Current Product Demo Layout" labelloc="t"];
+  node [fontname="Helvetica" fontsize=10 style=filled color="#333333" shape=box];
+  edge [fontname="Helvetica" fontsize=9 color="#888888"];
+
+  stage [label="Top stage" fillcolor="#F5F5F5"];
+
+  subgraph cluster_left {
+    label="Left column"; style=filled; fillcolor="#F8FFFE"; color="#aaaaaa";
+    header [label="Headline + metrics\nwhat the city is paying attention to" fillcolor="#DBEAFE"];
+    focus [label="Item in focus\nselected Source or Event" fillcolor="#FEF3C7"];
+    grid [label="Main grid\nSources + Events + Mixtapes" fillcolor="#D1FAE5"];
+  }
+
+  subgraph cluster_right {
+    label="Right column"; style=filled; fillcolor="#FFFDF7"; color="#aaaaaa";
+    map [label="Map\nwhere attention clusters" fillcolor="#D1FAE5"];
+    rail [label="Dedicated Classifieds rail\npractical circulation kept separate" fillcolor="#FEF3C7"];
+  }
+
+  bottom [label="Lower page\nplace summaries, source mix,\nand bottom-positioned controls" fillcolor="#EDE0F5"];
+
+  stage -> header [style=invis];
+  header -> focus [style=invis];
+  focus -> grid [style=invis];
+  map -> rail [style=invis];
+  grid -> bottom [style=invis];
+  rail -> bottom [style=invis];
+}

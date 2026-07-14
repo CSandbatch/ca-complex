@@ -1,0 +1,17 @@
+digraph state_flow {
+  rankdir=LR;
+  graph [fontname="Helvetica" fontsize=13 bgcolor="#ffffff" pad=0.4 label="Signal Atlas - What Changes When A User Interacts" labelloc="t"];
+  node [fontname="Helvetica" fontsize=10 style=filled color="#333333"];
+  edge [fontname="Helvetica" fontsize=9 color="#555555"];
+
+  actions [label="User actions\nchange lens\npick a filter\nselect a card\nfocus a place\nopen a Mixtape\nsave to draft Mixtape" fillcolor="#F5F5F5"];
+  state [label="App state\nlens, filters, selection,\nfocusPlace, view, mixtapeId,\ndraftMixtapeItemIds,\nmap position" fillcolor="#D1FAE5"];
+  url [label="URL state\nshareable read mode\nand Mixtape detail links" fillcolor="#DBEAFE"];
+  render [label="Renderer\nrebuilds the visible product\nfrom the current state" fillcolor="#EDE0F5"];
+  ui [label="Updated screen\nmap, focus panel, grid,\nrail, bottom controls" shape=ellipse fillcolor="#FEF3C7"];
+
+  actions -> state;
+  state -> url [label="when shareable"];
+  state -> render;
+  render -> ui;
+}

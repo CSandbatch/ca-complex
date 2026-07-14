@@ -1,0 +1,26 @@
+digraph modules {
+  rankdir=LR;
+  graph [fontname="Helvetica" fontsize=13 bgcolor="#ffffff" pad=0.4 label="Signal Atlas - Main Project Pieces" labelloc="t"];
+  node [fontname="Helvetica" fontsize=10 style=filled color="#333333" shape=box];
+  edge [fontname="Helvetica" fontsize=9 color="#555555"];
+
+  runtime [label="signal-atlas-data.js\nstatic runtime bundle" shape=cylinder fillcolor="#DBEAFE"];
+  mixtapes [label="src/atlas-mixtapes.js\nseeded + draft Mixtapes" fillcolor="#EDE0F5"];
+  graphq [label="src/atlas-graph.js\nquery + projection layer" fillcolor="#D1FAE5"];
+  state [label="src/ui/state.js\nURL, draft Mixtape,\nselection, map state" fillcolor="#FEF3C7"];
+  map [label="src/ui/map.js\nmap controls + SVG rendering" fillcolor="#FEF3C7"];
+  render [label="src/ui/render.js\nhome stage, focus panel,\nmain grid, rail, detail page" fillcolor="#FEF3C7"];
+  app [label="app.js\nthin bootstrap + event wiring" fillcolor="#D1FAE5"];
+  docs [label="README + screenshots + diagrams\nproduct demo layer" fillcolor="#F5F5F5"];
+
+  runtime -> graphq;
+  mixtapes -> graphq;
+  graphq -> render;
+  state -> render;
+  map -> render;
+  app -> graphq;
+  app -> state;
+  app -> map;
+  app -> render;
+  render -> docs [style=dashed label="document the real app"];
+}

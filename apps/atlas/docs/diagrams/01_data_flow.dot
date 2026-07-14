@@ -1,0 +1,19 @@
+digraph data_flow {
+  rankdir=LR;
+  graph [fontname="Helvetica" fontsize=13 bgcolor="#ffffff" pad=0.4 label="Signal Atlas - How Information Becomes The Product" labelloc="t"];
+  node [fontname="Helvetica" fontsize=10 style=filled color="#333333" shape=box];
+  edge [fontname="Helvetica" fontsize=9 color="#555555"];
+
+  sources [label="Local source material\nnewsletters, reporting,\nlive events, cultural coverage" fillcolor="#FEF3C7"];
+  pipeline [label="Export + pipeline step\nnormalizes raw inputs into\na static runtime bundle" fillcolor="#FEF3C7"];
+  runtime [label="signal-atlas-data.js\nchecked-in runtime truth\natlasBuild + atlasFeed + atlasMap" shape=cylinder fillcolor="#DBEAFE"];
+  graphq [label="Query layer\nsrc/atlas-graph.js\nprojects, filters, groups,\nand resolves Mixtapes" fillcolor="#D1FAE5"];
+  renderer [label="Product shell\nmap + focus panel + mixed grid\n+ classifieds rail + mixtape page" fillcolor="#EDE0F5"];
+  user [label="User experience\nunderstand the city,\ninspect evidence,\nand act" shape=ellipse fillcolor="#F5F5F5"];
+
+  sources -> pipeline [label="export"];
+  pipeline -> runtime [label="build"];
+  runtime -> graphq [label="read"];
+  graphq -> renderer [label="query payloads"];
+  renderer -> user [label="visible product"];
+}

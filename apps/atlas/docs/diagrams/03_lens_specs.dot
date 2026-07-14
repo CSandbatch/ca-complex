@@ -1,0 +1,15 @@
+digraph lens_specs {
+  rankdir=TB;
+  graph [fontname="Helvetica" fontsize=13 bgcolor="#ffffff" pad=0.4 label="Signal Atlas - Three Reading Modes" labelloc="t"];
+  node [fontname="Helvetica" fontsize=10 style=filled color="#333333" shape=box];
+  edge [fontname="Helvetica" fontsize=9 color="#555555"];
+
+  local [label="Local\nStart with neighborhood texture,\nscene motion, and local reporting" fillcolor="#D1FAE5"];
+  world [label="World\nRead New Orleans from the wider\ncivic and editorial field" fillcolor="#DBEAFE"];
+  classifieds [label="Classifieds\nKeep practical circulation visible\nwithout taking over the main grid" fillcolor="#FEF3C7"];
+  rules [label="All three are driven by\nlens specs and the same query layer.\nThe lens changes emphasis,\nnot the underlying product." shape=note fillcolor="#F5F5F5"];
+
+  local -> rules [style=dashed];
+  world -> rules [style=dashed];
+  classifieds -> rules [style=dashed];
+}
