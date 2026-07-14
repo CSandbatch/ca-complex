@@ -57,7 +57,7 @@ ca-complex; this repo stands alone when cloned bare.
 
 ## Quickstart
 
-> Windows: clone to a short path (e.g. `C:  cs`) — Turbopack build
+> Windows: clone to a short path (e.g. `C:\src\cs`) — Turbopack build
 > artifacts can exceed MAX_PATH in deep folders.
 
 ```bash
