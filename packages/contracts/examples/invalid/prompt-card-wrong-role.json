@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.1.0",
+  "card": {
+    "id": "bad_prompt",
+    "kind": "prompt_card",
+    "title": "Wrong role",
+    "slug": "wrong-role",
+    "status": "draft",
+    "visibility": "private",
+    "accessibleName": "Prompt with wrong role"
+  },
+  "fields": {
+    "promptText": { "dataType": "string", "value": "What is ____?", "source": "user" }
+  },
+  "classifications": [],
+  "surfaces": [{ "key": "game", "layoutMode": "game", "dimensions": { "width": 1, "height": 1, "unit": "px" }, "layers": [] }],
+  "gameData": { "role": "response", "playable": true },
+  "permissions": [],
+  "metadata": {}
+}
+

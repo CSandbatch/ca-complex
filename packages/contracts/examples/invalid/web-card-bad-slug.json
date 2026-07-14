@@ -1,0 +1,20 @@
+{
+  "schemaVersion": "0.1.0",
+  "card": {
+    "id": "bad_web",
+    "kind": "web_card",
+    "title": "Bad slug",
+    "slug": "Bad Slug",
+    "status": "draft",
+    "visibility": "private",
+    "accessibleName": "Bad slug web card"
+  },
+  "fields": {
+    "headline": { "dataType": "string", "value": "Hello", "source": "user" }
+  },
+  "classifications": [],
+  "surfaces": [{ "key": "public", "layoutMode": "responsive", "dimensions": { "width": 100, "height": 100, "unit": "%" }, "layers": [] }],
+  "permissions": [],
+  "metadata": {}
+}
+

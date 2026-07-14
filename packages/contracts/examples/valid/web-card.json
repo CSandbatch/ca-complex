@@ -1,0 +1,39 @@
+{
+  "schemaVersion": "0.1.0",
+  "card": {
+    "id": "card_web_001",
+    "kind": "web_card",
+    "title": "From websites to cards",
+    "slug": "from-websites-to-cards",
+    "status": "published",
+    "visibility": "public",
+    "accessibleName": "From websites to cards",
+    "canonicalUrl": "https://example.org/cards/from-websites-to-cards"
+  },
+  "fields": {
+    "headline": { "dataType": "string", "value": "Make a card, not a website.", "source": "user", "visible": true },
+    "body": { "dataType": "rich_text", "value": "A smaller editorial act for the open web.", "source": "user", "visible": true }
+  },
+  "classifications": [{ "scheme": "card-commons", "path": "publishing/web-card", "role": "primary" }],
+  "surfaces": [
+    {
+      "key": "public",
+      "layoutMode": "responsive",
+      "dimensions": { "width": 100, "height": 100, "unit": "%" },
+      "layers": [
+        { "id": "headline", "kind": "text", "fieldKey": "headline", "box": { "x": 8, "y": 12, "width": 84, "height": 20 }, "accessibleRole": "content" },
+        { "id": "body", "kind": "text", "fieldKey": "body", "box": { "x": 8, "y": 38, "width": 70, "height": 30 }, "accessibleRole": "content" }
+      ],
+      "accessibilityOrder": ["headline", "body"]
+    }
+  ],
+  "publicationData": {
+    "canonicalPath": "/cards/from-websites-to-cards",
+    "seoTitle": "From websites to cards",
+    "seoDescription": "A smaller editorial act for the open web."
+  },
+  "permissions": [{ "principal": "public", "actions": ["read", "remix"] }],
+  "remixPolicy": { "mode": "fork_with_attribution", "requireAttribution": true },
+  "metadata": {}
+}
+

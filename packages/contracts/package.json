@@ -1,0 +1,10 @@
+{
+  "name": "@ca/contracts",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Machine-verifiable card contracts: JSON Schemas, OpenAPI, fixtures, and the witness harness.",
+  "scripts": {
+    "validate:schemas": "node scripts/validate-schemas.mjs",
+    "fixtures:check": "node scripts/check-fixtures.mjs"
+  }
+}

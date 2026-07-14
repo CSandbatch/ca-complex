@@ -1,0 +1,24 @@
+name: Research evidence
+description: Add or challenge evidence used by the project.
+title: "[research] "
+labels:
+  - research
+body:
+  - type: input
+    id: claim
+    attributes:
+      label: Claim ID
+      placeholder: C-001
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidence or correction
+    validations:
+      required: true
+  - type: input
+    id: source
+    attributes:
+      label: Primary source URL
+    validations:
+      required: true
+

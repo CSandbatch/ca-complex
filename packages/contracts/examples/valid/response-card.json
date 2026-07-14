@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "0.1.0",
+  "card": {
+    "id": "card_response_001",
+    "kind": "response_card",
+    "title": "A portable card",
+    "slug": "a-portable-card",
+    "status": "draft",
+    "visibility": "workspace",
+    "accessibleName": "Response: A portable card with delusions of grandeur"
+  },
+  "fields": {
+    "responseText": { "dataType": "string", "value": "A portable card with delusions of grandeur.", "source": "user", "visible": true }
+  },
+  "classifications": [{ "scheme": "card-commons", "path": "game/prompt-response/response", "role": "game_role" }],
+  "surfaces": [
+    {
+      "key": "game",
+      "layoutMode": "game",
+      "dimensions": { "width": 600, "height": 840, "unit": "px" },
+      "background": { "color": "#f3efe5" },
+      "layers": [
+        { "id": "response", "kind": "text", "fieldKey": "responseText", "box": { "x": 60, "y": 72, "width": 480, "height": 320 }, "accessibleRole": "content" }
+      ],
+      "accessibilityOrder": ["response"]
+    }
+  ],
+  "gameData": { "role": "response", "playable": true },
+  "permissions": [{ "principal": "workspace:editors", "actions": ["read", "edit", "play"] }],
+  "metadata": {}
+}
+

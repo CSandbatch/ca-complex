@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "0.1.0",
+  "card": {
+    "id": "card_pass_001",
+    "kind": "pass_card",
+    "title": "Pass",
+    "slug": "pass",
+    "status": "published",
+    "visibility": "public",
+    "accessibleName": "PASS action card"
+  },
+  "fields": {
+    "message": { "dataType": "string", "value": "PASS", "source": "template", "visible": true, "locked": true }
+  },
+  "classifications": [{ "scheme": "card-commons", "path": "game/action/pass", "role": "game_role" }],
+  "surfaces": [
+    {
+      "key": "card",
+      "layoutMode": "fixed",
+      "dimensions": { "width": 600, "height": 840, "unit": "px" },
+      "background": { "color": "#ef472f" },
+      "layers": [
+        { "id": "pass", "kind": "text", "fieldKey": "message", "box": { "x": 50, "y": 330, "width": 500, "height": 180 }, "accessibleRole": "content" }
+      ],
+      "accessibilityOrder": ["pass"]
+    }
+  ],
+  "gameData": {
+    "role": "pass",
+    "playable": true,
+    "rulesText": "Decline the current action.",
+    "effects": [{ "type": "pass_turn", "parameters": {} }]
+  },
+  "permissions": [{ "principal": "public", "actions": ["read", "play", "remix"] }],
+  "remixPolicy": { "mode": "duplicate" },
+  "metadata": {}
+}
+

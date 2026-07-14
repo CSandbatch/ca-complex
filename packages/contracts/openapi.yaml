@@ -1,0 +1,574 @@
+openapi: 3.1.0
+jsonSchemaDialect: https://json-schema.org/draft/2020-12/schema
+info:
+  title: Card Commons MVP API
+  version: 0.1.0
+  summary: A proposed HTTP contract for structured cards, collections, publishing, play, assets, and generation.
+  description: |
+    This contract defines service behavior independently of whether a hosted
+    implementation uses HTTP internally. Mutations require bearer
+    authentication, an `Idempotency-Key`, authorization, validation, and audit.
+  license:
+    name: MIT
+    identifier: MIT
+servers:
+  - url: https://api.example.cardcommons.org/v1
+    description: Illustrative hosted implementation
+security:
+  - bearerAuth: []
+tags:
+  - name: Cards
+    description: Stable card identities and immutable revisions.
+  - name: Collections
+    description: Role-bearing membership and ordering.
+  - name: Publications
+    description: Atomic revision pinning at public paths.
+  - name: Games
+    description: Prompt-response game definitions, sessions, and moves.
+  - name: Assets
+    description: Provenance-bearing media registered after validation.
+  - name: Generation
+    description: Asynchronous generation jobs and cancellation.
+paths:
+  /cards:
+    post:
+      tags: [Cards]
+      operationId: createCard
+      summary: Create a card and its first revision
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateCardRequest"
+      responses:
+        "201":
+          description: Card created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CardResource"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /cards/{cardId}:
+    parameters:
+      - $ref: "#/components/parameters/CardId"
+    get:
+      tags: [Cards]
+      operationId: getCard
+      summary: Read a card and its authorized current revision pointers
+      responses:
+        "200":
+          description: Card
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CardResource"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /cards/{cardId}/revisions:
+    parameters:
+      - $ref: "#/components/parameters/CardId"
+    post:
+      tags: [Cards]
+      operationId: createCardRevision
+      summary: Save an immutable validated revision
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: If-Match
+          in: header
+          required: true
+          description: Base revision ID used for optimistic concurrency.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [document]
+              properties:
+                document:
+                  $ref: "./schemas/card-document.schema.json"
+                changeNote:
+                  type: string
+                  maxLength: 500
+      responses:
+        "201":
+          description: Revision saved
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CardRevision"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /cards/{cardId}/export:
+    parameters:
+      - $ref: "#/components/parameters/CardId"
+    get:
+      tags: [Cards]
+      operationId: exportCard
+      summary: Export a pinned or authorized draft card
+      parameters:
+        - name: revisionId
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: format
+          in: query
+          required: true
+          schema:
+            enum: [json, png]
+        - name: surface
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Exported card document or rendered image
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/card-document.schema.json"
+            image/png:
+              schema:
+                type: string
+                contentEncoding: binary
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /collections:
+    post:
+      tags: [Collections]
+      operationId: createCollection
+      summary: Create a stack, deck, series, or game collection
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schemas/collection.schema.json"
+      responses:
+        "201":
+          description: Collection created
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/collection.schema.json"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+  /collections/{collectionId}/memberships:
+    parameters:
+      - $ref: "#/components/parameters/CollectionId"
+    post:
+      tags: [Collections]
+      operationId: addCollectionMembership
+      summary: Add a role-bearing card membership
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MembershipMutation"
+      responses:
+        "201":
+          description: Membership added
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "409":
+          $ref: "#/components/responses/Conflict"
+    patch:
+      tags: [Collections]
+      operationId: reorderCollection
+      summary: Apply one atomic ordered membership update
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+        - name: If-Match
+          in: header
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [membershipIds]
+              properties:
+                membershipIds:
+                  type: array
+                  minItems: 1
+                  uniqueItems: true
+                  items:
+                    type: string
+      responses:
+        "204":
+          description: Reordered
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /publications:
+    post:
+      tags: [Publications]
+      operationId: publishSubject
+      summary: Atomically publish a validated subject revision
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schemas/publication.schema.json"
+      responses:
+        "201":
+          description: Published
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/publication.schema.json"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /publications/{publicationId}:
+    delete:
+      tags: [Publications]
+      operationId: unpublishSubject
+      summary: Remove public delivery without deleting source history
+      parameters:
+        - name: publicationId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "204":
+          description: Unpublished
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /games:
+    post:
+      tags: [Games]
+      operationId: createGame
+      summary: Create a prompt-response game definition
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schemas/game.schema.json"
+      responses:
+        "201":
+          description: Game created
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/game.schema.json"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+  /games/{gameId}/sessions:
+    post:
+      tags: [Games]
+      operationId: createGameSession
+      summary: Create an authoritative game lobby
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                randomSeed:
+                  type: string
+                  description: Optional deterministic seed for authorized playtests.
+      responses:
+        "201":
+          description: Lobby created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameSessionProjection"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+  /sessions/{sessionId}/moves:
+    post:
+      tags: [Games]
+      operationId: submitGameMove
+      summary: Submit player intent to the authoritative game state machine
+      parameters:
+        - name: sessionId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GameMove"
+      responses:
+        "200":
+          description: Player-specific state projection after the move
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GameSessionProjection"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/ValidationError"
+  /assets:
+    post:
+      tags: [Assets]
+      operationId: registerAsset
+      summary: Register a validated upload or import
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schemas/asset.schema.json"
+      responses:
+        "201":
+          description: Asset registered
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/asset.schema.json"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+  /generation-jobs:
+    post:
+      tags: [Generation]
+      operationId: createGenerationJob
+      summary: Queue a structure-aware generation job
+      parameters:
+        - $ref: "#/components/parameters/IdempotencyKey"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "./schemas/generation-job.schema.json"
+      responses:
+        "202":
+          description: Job queued
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/generation-job.schema.json"
+        "400":
+          $ref: "#/components/responses/ValidationError"
+        "429":
+          description: Workspace generation limit reached
+          headers:
+            Retry-After:
+              schema:
+                type: integer
+  /generation-jobs/{jobId}:
+    get:
+      tags: [Generation]
+      operationId: getGenerationJob
+      summary: Read generation progress and accepted outputs
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Job state
+          content:
+            application/json:
+              schema:
+                $ref: "./schemas/generation-job.schema.json"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      tags: [Generation]
+      operationId: cancelGenerationJob
+      summary: Request cancellation of a queued or running job
+      parameters:
+        - name: jobId
+          in: path
+          required: true
+          schema:
+            type: string
+        - $ref: "#/components/parameters/IdempotencyKey"
+      responses:
+        "202":
+          description: Cancellation requested
+        "409":
+          $ref: "#/components/responses/Conflict"
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  parameters:
+    IdempotencyKey:
+      name: Idempotency-Key
+      in: header
+      required: true
+      description: Unique client-generated key retained for at least 24 hours.
+      schema:
+        type: string
+        minLength: 16
+        maxLength: 200
+    CardId:
+      name: cardId
+      in: path
+      required: true
+      schema:
+        type: string
+    CollectionId:
+      name: collectionId
+      in: path
+      required: true
+      schema:
+        type: string
+  responses:
+    ValidationError:
+      description: The request is syntactically valid but violates a contract or invariant.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "./schemas/definitions.schema.json#/$defs/error"
+    Unauthorized:
+      description: Authentication is missing or invalid.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "./schemas/definitions.schema.json#/$defs/error"
+    NotFound:
+      description: The resource does not exist or is not visible to the caller.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "./schemas/definitions.schema.json#/$defs/error"
+    Conflict:
+      description: The base revision, sequence, path, or idempotency state conflicts.
+      content:
+        application/problem+json:
+          schema:
+            $ref: "./schemas/definitions.schema.json#/$defs/error"
+  schemas:
+    CreateCardRequest:
+      type: object
+      required: [document]
+      properties:
+        workspaceId:
+          type: string
+        document:
+          $ref: "./schemas/card-document.schema.json"
+    CardRevision:
+      type: object
+      required: [id, cardId, revisionNumber, document, createdAt, createdBy]
+      properties:
+        id:
+          type: string
+        cardId:
+          type: string
+        revisionNumber:
+          type: integer
+          minimum: 1
+        document:
+          $ref: "./schemas/card-document.schema.json"
+        createdAt:
+          type: string
+          format: date-time
+        createdBy:
+          type: string
+        changeNote:
+          type: string
+    CardResource:
+      type: object
+      required: [id, ownerId, currentRevision]
+      properties:
+        id:
+          type: string
+        ownerId:
+          type: string
+        workspaceId:
+          type: string
+        currentRevision:
+          $ref: "#/components/schemas/CardRevision"
+        publishedRevisionId:
+          type: string
+    MembershipMutation:
+      type: object
+      required: [cardId, role]
+      properties:
+        cardId:
+          type: string
+        role:
+          enum: [member, cover, episode, prompt, response, rule, source]
+        position:
+          type: integer
+          minimum: 0
+        metadata:
+          type: object
+          additionalProperties: true
+    GameMove:
+      type: object
+      required: [playerId, moveType, expectedSequence, payload]
+      properties:
+        playerId:
+          type: string
+        moveType:
+          enum: [join, start, draw, submit, judge, pass, score, complete]
+        expectedSequence:
+          type: integer
+          minimum: 0
+        payload:
+          type: object
+          additionalProperties: true
+    GameSessionProjection:
+      type: object
+      required: [id, status, sequence, publicState]
+      properties:
+        id:
+          type: string
+        status:
+          enum: [lobby, active, paused, complete, abandoned]
+        sequence:
+          type: integer
+          minimum: 0
+        publicState:
+          type: object
+          additionalProperties: true
+        privateState:
+          type: object
+          description: Present only for the authenticated player's authorized projection.
+          additionalProperties: true

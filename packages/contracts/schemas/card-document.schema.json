@@ -1,0 +1,233 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cardcommons.org/schemas/card-document.schema.json",
+  "title": "CardDocument v0.1",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "card",
+    "fields",
+    "surfaces",
+    "classifications",
+    "permissions",
+    "metadata"
+  ],
+  "properties": {
+    "schemaVersion": { "const": "0.1.0" },
+    "card": {
+      "type": "object",
+      "required": ["id", "kind", "title", "slug", "status", "visibility", "accessibleName"],
+      "properties": {
+        "id": { "$ref": "definitions.schema.json#/$defs/id" },
+        "kind": { "$ref": "definitions.schema.json#/$defs/cardKind" },
+        "title": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "slug": { "$ref": "definitions.schema.json#/$defs/slug" },
+        "status": { "$ref": "definitions.schema.json#/$defs/status" },
+        "visibility": { "$ref": "definitions.schema.json#/$defs/visibility" },
+        "accessibleName": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "canonicalUrl": { "type": "string", "format": "uri" },
+        "sourceCardId": { "$ref": "definitions.schema.json#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "fields": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9_]*$" },
+      "additionalProperties": {
+        "$ref": "definitions.schema.json#/$defs/fieldValue"
+      }
+    },
+    "classifications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["scheme", "path", "role"],
+        "properties": {
+          "scheme": { "type": "string", "minLength": 1 },
+          "path": { "type": "string", "minLength": 1 },
+          "role": {
+            "enum": ["primary", "secondary", "visual_style", "game_role", "topic", "source_context"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "surfaces": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "definitions.schema.json#/$defs/surface" }
+    },
+    "relations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["toCardId", "relationType"],
+        "properties": {
+          "toCardId": { "$ref": "definitions.schema.json#/$defs/id" },
+          "relationType": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "gameData": {
+      "type": "object",
+      "required": ["role", "playable"],
+      "properties": {
+        "role": {
+          "enum": ["prompt", "response", "action", "rule", "modifier", "identity", "resource", "pass"]
+        },
+        "playable": { "type": "boolean" },
+        "values": { "type": "object", "additionalProperties": true },
+        "rulesText": { "type": "string" },
+        "effects": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type": { "type": "string" },
+              "parameters": { "type": "object", "additionalProperties": true }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "publicationData": {
+      "type": "object",
+      "properties": {
+        "canonicalPath": { "type": "string", "pattern": "^/" },
+        "seoTitle": { "type": "string", "maxLength": 70 },
+        "seoDescription": { "type": "string", "maxLength": 200 },
+        "socialImageAssetId": { "$ref": "definitions.schema.json#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "assets": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["assetId", "role"],
+        "properties": {
+          "assetId": { "$ref": "definitions.schema.json#/$defs/id" },
+          "role": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "permissions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["principal", "actions"],
+        "properties": {
+          "principal": { "type": "string", "minLength": 1 },
+          "actions": {
+            "type": "array",
+            "items": { "enum": ["read", "edit", "publish", "remix", "play", "admin"] },
+            "uniqueItems": true
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "remixPolicy": {
+      "$ref": "definitions.schema.json#/$defs/remixPolicy"
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "type": "object",
+        "properties": { "card": { "type": "object", "properties": { "kind": { "const": "calling_card" } } } }
+      },
+      "then": {
+        "type": "object",
+        "properties": { "fields": { "type": "object", "properties": { "message": {} }, "required": ["message"] } }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "card": { "type": "object", "properties": { "kind": { "const": "web_card" } } } }
+      },
+      "then": {
+        "type": "object",
+        "properties": { "fields": { "type": "object", "properties": { "headline": {} }, "required": ["headline"] } }
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "card": { "type": "object", "properties": { "kind": { "const": "prompt_card" } } } }
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "fields": { "type": "object", "properties": { "promptText": {} }, "required": ["promptText"] },
+          "gameData": {
+            "type": "object",
+            "properties": { "role": { "const": "prompt" }, "playable": { "const": true } }
+          }
+        },
+        "required": ["gameData"]
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "card": { "type": "object", "properties": { "kind": { "const": "response_card" } } } }
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "fields": { "type": "object", "properties": { "responseText": {} }, "required": ["responseText"] },
+          "gameData": {
+            "type": "object",
+            "properties": { "role": { "const": "response" }, "playable": { "const": true } }
+          }
+        },
+        "required": ["gameData"]
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "card": { "type": "object", "properties": { "kind": { "const": "pass_card" } } } }
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "fields": { "type": "object", "properties": { "message": {} }, "required": ["message"] },
+          "gameData": {
+            "type": "object",
+            "properties": { "role": { "const": "pass" }, "playable": { "const": true } }
+          }
+        },
+        "required": ["gameData"]
+      }
+    },
+    {
+      "if": {
+        "type": "object",
+        "properties": { "card": { "type": "object", "properties": { "kind": { "const": "mixtape_card" } } } }
+      },
+      "then": {
+        "type": "object",
+        "properties": {
+          "fields": {
+            "type": "object",
+            "properties": { "summary": {}, "tracklist": {} },
+            "required": ["summary", "tracklist"]
+          }
+        }
+      }
+    }
+  ],
+  "additionalProperties": false
+}

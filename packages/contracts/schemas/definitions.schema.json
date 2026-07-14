@@ -1,0 +1,207 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cardcommons.org/schemas/definitions.schema.json",
+  "title": "Card Commons shared definitions",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+      "maxLength": 120
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "visibility": {
+      "enum": ["private", "workspace", "unlisted", "public"]
+    },
+    "status": {
+      "enum": ["draft", "published", "unlisted", "archived"]
+    },
+    "cardKind": {
+      "enum": [
+        "text_card",
+        "image_card",
+        "web_card",
+        "calling_card",
+        "prompt_card",
+        "response_card",
+        "pass_card",
+        "mixtape_card",
+        "custom"
+      ]
+    },
+    "fieldValue": {
+      "type": "object",
+      "required": ["dataType", "value", "source"],
+      "properties": {
+        "dataType": {
+          "enum": [
+            "string",
+            "rich_text",
+            "number",
+            "boolean",
+            "image_ref",
+            "asset_ref",
+            "url",
+            "date",
+            "classification_ref",
+            "json"
+          ]
+        },
+        "value": {},
+        "source": {
+          "enum": ["user", "template", "import", "system", "game_engine", "ai_proposed"]
+        },
+        "visible": { "type": "boolean", "default": true },
+        "locked": { "type": "boolean", "default": false },
+        "metadata": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "box": {
+      "type": "object",
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": { "type": "number" },
+        "y": { "type": "number" },
+        "width": { "type": "number", "exclusiveMinimum": 0 },
+        "height": { "type": "number", "exclusiveMinimum": 0 },
+        "rotation": { "type": "number", "default": 0 }
+      },
+      "additionalProperties": false
+    },
+    "layer": {
+      "type": "object",
+      "required": ["id", "kind", "box"],
+      "properties": {
+        "id": { "$ref": "#/$defs/id" },
+        "kind": {
+          "enum": ["text", "image", "background", "number", "symbol", "border", "shape"]
+        },
+        "fieldKey": { "type": "string", "minLength": 1 },
+        "assetId": { "$ref": "#/$defs/id" },
+        "box": { "$ref": "#/$defs/box" },
+        "visible": { "type": "boolean", "default": true },
+        "locked": { "type": "boolean", "default": false },
+        "accessibleRole": {
+          "enum": ["content", "label", "image", "presentation"]
+        },
+        "style": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "type": "object",
+            "properties": { "kind": { "const": "image" } },
+            "required": ["kind"]
+          },
+          "then": {
+            "type": "object",
+            "anyOf": [
+              { "type": "object", "properties": { "assetId": {} }, "required": ["assetId"] },
+              { "type": "object", "properties": { "fieldKey": {} }, "required": ["fieldKey"] }
+            ]
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "surface": {
+      "type": "object",
+      "required": ["key", "layoutMode", "dimensions", "layers"],
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^[a-z][a-z0-9_]*$"
+        },
+        "layoutMode": {
+          "enum": ["fixed", "responsive", "print", "game", "embed"]
+        },
+        "dimensions": {
+          "type": "object",
+          "required": ["width", "height", "unit"],
+          "properties": {
+            "width": { "type": "number", "exclusiveMinimum": 0 },
+            "height": { "type": "number", "exclusiveMinimum": 0 },
+            "unit": { "enum": ["px", "in", "mm", "%"] },
+            "dpi": { "type": "number", "exclusiveMinimum": 0 }
+          },
+          "additionalProperties": false
+        },
+        "background": {
+          "type": "object",
+          "properties": {
+            "color": { "type": "string" },
+            "assetId": { "$ref": "#/$defs/id" }
+          },
+          "additionalProperties": false
+        },
+        "layers": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/layer" }
+        },
+        "accessibilityOrder": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "remixPolicy": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": {
+          "enum": [
+            "none",
+            "duplicate",
+            "fork_with_attribution",
+            "fork_without_public_lineage",
+            "template_only"
+          ]
+        },
+        "requireAttribution": { "type": "boolean" },
+        "allowCommercialUse": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "error": {
+      "type": "object",
+      "required": ["type", "title", "status"],
+      "properties": {
+        "type": { "type": "string", "format": "uri-reference" },
+        "title": { "type": "string" },
+        "status": { "type": "integer", "minimum": 400, "maximum": 599 },
+        "detail": { "type": "string" },
+        "instance": { "type": "string", "format": "uri-reference" },
+        "errors": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["path", "code", "message"],
+            "properties": {
+              "path": { "type": "string" },
+              "code": { "type": "string" },
+              "message": { "type": "string" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

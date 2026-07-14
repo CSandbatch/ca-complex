@@ -1,0 +1,8 @@
+{
+  "mixtape_card": {
+    "builder": "apps/atlas/public/src/export/build-mixtape-card.mjs",
+    "export": "buildMixtapeCardDocument",
+    "fixture": "packages/contracts/examples/valid/mixtape-card.json",
+    "generator": "createAtlasGraph({atlasBuild,atlasFeed,atlasMap} from apps/atlas/public/signal-atlas-data.js).mixtapeById('mixtape-frenchmen-after-dark', []) resolved via apps/atlas/public/src/atlas-graph.js"
+  }
+}

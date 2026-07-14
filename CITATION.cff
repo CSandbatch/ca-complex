@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use Card Commons in your work, please cite this repository."
+title: "Card Commons: A card-native web protocol and product specification"
+type: software
+version: 0.1.0
+date-released: 2026-06-28
+license: CC-BY-4.0
+repository-code: "https://github.com/CSandbatch/ca-complex"
+# CANONICAL-CUTOVER: placeholder Vercel URL, matches apps/cards/app/layout.tsx; Phase 5 confirms the real production URL.
+url: "https://ca-cards.vercel.app"
+keywords:
+  - card-native web
+  - publishing protocol
+  - portable content
+  - game systems
+  - structured media
+

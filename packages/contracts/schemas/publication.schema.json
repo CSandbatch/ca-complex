@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cardcommons.org/schemas/publication.schema.json",
+  "title": "Publication",
+  "type": "object",
+  "required": ["id", "subjectType", "subjectId", "urlPath", "visibility", "publishedRevisionId", "publishedAt"],
+  "properties": {
+    "id": { "$ref": "definitions.schema.json#/$defs/id" },
+    "subjectType": { "enum": ["card", "collection", "game", "series", "profile"] },
+    "subjectId": { "$ref": "definitions.schema.json#/$defs/id" },
+    "urlPath": { "type": "string", "pattern": "^/" },
+    "visibility": { "enum": ["public", "unlisted", "private"] },
+    "publishedRevisionId": { "$ref": "definitions.schema.json#/$defs/id" },
+    "title": { "type": "string" },
+    "description": { "type": "string" },
+    "socialImageAssetId": { "$ref": "definitions.schema.json#/$defs/id" },
+    "publishedAt": { "$ref": "definitions.schema.json#/$defs/timestamp" }
+  },
+  "additionalProperties": false
+}
+

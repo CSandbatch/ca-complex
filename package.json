@@ -1,0 +1,31 @@
+{
+  "name": "ca-complex",
+  "version": "0.1.0",
+  "private": true,
+  "engines": {
+    "node": ">=22"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspaces --if-present",
+    "build": "npm run build --workspaces --if-present",
+    "lint:md": "markdownlint-cli2 \"**/*.md\" \"#node_modules\" \"#**/node_modules\" \"#**/.next\" \"#**/out\" \"#**/test-results\"",
+    "validate:schemas": "node packages/contracts/scripts/validate-schemas.mjs",
+    "validate:openapi": "redocly lint packages/contracts/openapi.yaml",
+    "tokens:sync": "node scripts/sync-tokens.mjs",
+    "tokens:check": "node scripts/sync-tokens.mjs --check",
+    "fixtures:check": "node packages/contracts/scripts/check-fixtures.mjs",
+    "check:root": "npm run lint:md && npm run validate:schemas && npm run validate:openapi && npm run tokens:check && npm run fixtures:check",
+    "check": "npm run check:root && npm run check --workspaces --if-present",
+    "check:browser": "npm run test:e2e --workspaces --if-present"
+  },
+  "devDependencies": {
+    "@redocly/cli": "^2.13.0",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "markdownlint-cli2": "^0.18.1"
+  }
+}

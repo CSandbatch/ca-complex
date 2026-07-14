@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cardcommons.org/schemas/asset.schema.json",
+  "title": "Asset",
+  "type": "object",
+  "required": ["id", "workspaceId", "kind", "name", "uri", "mimeType", "source", "rights", "createdAt", "createdBy"],
+  "properties": {
+    "id": { "$ref": "definitions.schema.json#/$defs/id" },
+    "workspaceId": { "$ref": "definitions.schema.json#/$defs/id" },
+    "kind": { "enum": ["image", "svg", "texture", "symbol", "document"] },
+    "name": { "type": "string", "minLength": 1 },
+    "uri": { "type": "string", "format": "uri-reference" },
+    "mimeType": { "type": "string", "pattern": "^[a-z]+/[a-z0-9.+-]+$" },
+    "width": { "type": "integer", "minimum": 1 },
+    "height": { "type": "integer", "minimum": 1 },
+    "source": { "enum": ["uploaded", "imported", "ai_generated", "ai_edited", "system"] },
+    "rights": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {
+        "status": { "enum": ["owned", "licensed", "public_domain", "fair_use_asserted", "unknown", "restricted"] },
+        "license": { "type": "string" },
+        "attribution": { "type": "string" },
+        "usageNotes": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "generation": {
+      "type": "object",
+      "required": ["provider", "model", "prompt"],
+      "properties": {
+        "provider": { "type": "string" },
+        "model": { "type": "string" },
+        "prompt": { "type": "string" },
+        "settings": { "type": "object", "additionalProperties": true },
+        "sourceAssetIds": {
+          "type": "array",
+          "items": { "$ref": "definitions.schema.json#/$defs/id" }
+        }
+      },
+      "additionalProperties": false
+    },
+    "createdAt": { "$ref": "definitions.schema.json#/$defs/timestamp" },
+    "createdBy": { "$ref": "definitions.schema.json#/$defs/id" }
+  },
+  "allOf": [
+    {
+      "if": { "type": "object", "properties": { "source": { "enum": ["ai_generated", "ai_edited"] } } },
+      "then": { "type": "object", "properties": { "generation": {} }, "required": ["generation"] }
+    }
+  ],
+  "additionalProperties": false
+}

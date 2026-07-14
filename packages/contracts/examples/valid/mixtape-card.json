@@ -1,0 +1,153 @@
+{
+  "schemaVersion": "0.1.0",
+  "card": {
+    "id": "card-mixtape-frenchmen-after-dark",
+    "kind": "mixtape_card",
+    "title": "Frenchmen After Dark",
+    "slug": "mixtape-frenchmen-after-dark",
+    "status": "published",
+    "visibility": "public",
+    "accessibleName": "Mixtape card: Frenchmen After Dark, curated by Signal Atlas, 5 items"
+  },
+  "fields": {
+    "summary": {
+      "dataType": "string",
+      "value": "Frenchmen Street sets, neighborhood writing, and late-hour spillover in one restrained pass.",
+      "source": "import",
+      "visible": true
+    },
+    "description": {
+      "dataType": "rich_text",
+      "value": "A compact run through the Frenchmen corridor: live sets at 30/90, scene writing, and the kind of local texture that reads best together instead of as isolated items.",
+      "source": "import",
+      "visible": true
+    },
+    "curator": {
+      "dataType": "string",
+      "value": "Signal Atlas",
+      "source": "import",
+      "visible": true
+    },
+    "tracklist": {
+      "dataType": "json",
+      "source": "import",
+      "visible": true,
+      "value": [
+        {
+          "id": "EventManicMixtape",
+          "type": "event",
+          "title": "Manic Mixtape at 30/90",
+          "source": "WWOZ Livewire",
+          "placeKey": "frenchman",
+          "url": "https://www.wwoz.org/events/1314691"
+        },
+        {
+          "id": "EventAndreLovett",
+          "type": "event",
+          "title": "Andre Lovett at 30/90",
+          "source": "WWOZ Livewire",
+          "placeKey": "frenchman",
+          "url": "https://www.wwoz.org/events/1314686"
+        },
+        {
+          "id": "EventFunhouse",
+          "type": "event",
+          "title": "Funhouse at 30/90",
+          "source": "WWOZ Livewire",
+          "placeKey": "frenchman",
+          "url": "https://www.wwoz.org/events/1314681"
+        },
+        {
+          "id": "ArticleNichesAndTeaches",
+          "type": "source",
+          "title": "The niches and teaches of Peaches",
+          "source": "Up All Night NOLA",
+          "placeKey": "frenchman",
+          "url": "https://upallnightnola.substack.com/p/the-niches-and-teaches-of-peaches"
+        },
+        {
+          "id": "ArticleWiffOfKings",
+          "type": "source",
+          "title": "Catch the wiff of kings thru the looking glass",
+          "source": "Up All Night NOLA",
+          "placeKey": "frenchman",
+          "url": "https://upallnightnola.substack.com/p/catch-the-wiff-of-kings-thru-the"
+        }
+      ]
+    }
+  },
+  "classifications": [
+    {
+      "scheme": "signal-atlas",
+      "path": "curation/mixtape",
+      "role": "primary"
+    },
+    {
+      "scheme": "signal-atlas",
+      "path": "place/frenchman",
+      "role": "source_context"
+    }
+  ],
+  "surfaces": [
+    {
+      "key": "card",
+      "layoutMode": "fixed",
+      "dimensions": {
+        "width": 750,
+        "height": 1050,
+        "unit": "px"
+      },
+      "background": {
+        "color": "#0f1116"
+      },
+      "layers": [
+        {
+          "id": "summary",
+          "kind": "text",
+          "fieldKey": "summary",
+          "box": {
+            "x": 90,
+            "y": 120,
+            "width": 570,
+            "height": 240
+          },
+          "accessibleRole": "content"
+        }
+      ],
+      "accessibilityOrder": [
+        "summary"
+      ]
+    }
+  ],
+  "permissions": [
+    {
+      "principal": "owner",
+      "actions": [
+        "read",
+        "edit",
+        "publish",
+        "remix",
+        "admin"
+      ]
+    }
+  ],
+  "remixPolicy": {
+    "mode": "fork_with_attribution",
+    "requireAttribution": true
+  },
+  "metadata": {
+    "generator": "signal-atlas",
+    "generatedAt": "2026-04-01T02:11:06.717401+00:00",
+    "sourceMixtapeId": "mixtape-frenchmen-after-dark",
+    "atlasUpdatedAt": "2026-04-01T02:11:06.717401+00:00",
+    "counts": {
+      "tracks": 5,
+      "events": 3,
+      "sources": 2
+    },
+    "sourceNames": [
+      "WWOZ Livewire",
+      "Up All Night NOLA"
+    ]
+  }
+}

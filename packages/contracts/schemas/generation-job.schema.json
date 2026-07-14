@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cardcommons.org/schemas/generation-job.schema.json",
+  "title": "Generation job",
+  "type": "object",
+  "required": ["id", "workspaceId", "userId", "jobType", "status", "prompt", "input", "output", "createdAt"],
+  "properties": {
+    "id": { "$ref": "definitions.schema.json#/$defs/id" },
+    "workspaceId": { "$ref": "definitions.schema.json#/$defs/id" },
+    "userId": { "$ref": "definitions.schema.json#/$defs/id" },
+    "jobType": {
+      "enum": ["generate_asset", "edit_asset", "generate_card_surface", "generate_card_batch", "generate_stack_style", "generate_card_back"]
+    },
+    "status": { "enum": ["queued", "running", "complete", "failed", "cancelled"] },
+    "prompt": { "type": "string", "minLength": 1 },
+    "input": {
+      "type": "object",
+      "properties": {
+        "cardId": { "$ref": "definitions.schema.json#/$defs/id" },
+        "revisionId": { "$ref": "definitions.schema.json#/$defs/id" },
+        "surfaceKey": { "type": "string" },
+        "layerId": { "$ref": "definitions.schema.json#/$defs/id" },
+        "assetIds": {
+          "type": "array",
+          "items": { "$ref": "definitions.schema.json#/$defs/id" }
+        },
+        "collectionId": { "$ref": "definitions.schema.json#/$defs/id" }
+      },
+      "additionalProperties": false
+    },
+    "output": {
+      "type": "object",
+      "properties": {
+        "assetIds": { "type": "array", "items": { "$ref": "definitions.schema.json#/$defs/id" } },
+        "cardIds": { "type": "array", "items": { "$ref": "definitions.schema.json#/$defs/id" } },
+        "revisionIds": { "type": "array", "items": { "$ref": "definitions.schema.json#/$defs/id" } }
+      },
+      "additionalProperties": false
+    },
+    "provider": { "type": "string" },
+    "model": { "type": "string" },
+    "settings": { "type": "object", "additionalProperties": true },
+    "error": { "type": "string" },
+    "createdAt": { "$ref": "definitions.schema.json#/$defs/timestamp" },
+    "completedAt": { "$ref": "definitions.schema.json#/$defs/timestamp" }
+  },
+  "additionalProperties": false
+}
+

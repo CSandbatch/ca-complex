@@ -1,0 +1,27 @@
+name: Specification change
+description: Propose a normative protocol or product-specification change.
+title: "[spec] "
+labels:
+  - specification
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What implementer or user problem does this solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: Describe behavior, compatibility, and migration impact.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: true
+

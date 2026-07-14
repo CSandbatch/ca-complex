@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cardcommons.org/schemas/game.schema.json",
+  "title": "Prompt-response game",
+  "type": "object",
+  "required": ["id", "ownerId", "collectionId", "title", "slug", "gameType", "visibility", "ruleset"],
+  "properties": {
+    "id": { "$ref": "definitions.schema.json#/$defs/id" },
+    "ownerId": { "$ref": "definitions.schema.json#/$defs/id" },
+    "collectionId": { "$ref": "definitions.schema.json#/$defs/id" },
+    "title": { "type": "string", "minLength": 1 },
+    "slug": { "$ref": "definitions.schema.json#/$defs/slug" },
+    "gameType": { "const": "prompt_response" },
+    "visibility": { "$ref": "definitions.schema.json#/$defs/visibility" },
+    "ruleset": {
+      "type": "object",
+      "required": ["minPlayers", "maxPlayers", "handSize", "judgeMode", "completion"],
+      "properties": {
+        "minPlayers": { "type": "integer", "minimum": 3 },
+        "maxPlayers": { "type": "integer", "minimum": 3 },
+        "handSize": { "type": "integer", "minimum": 1 },
+        "judgeMode": { "enum": ["rotating", "host", "vote"] },
+        "completion": {
+          "oneOf": [
+            {
+              "type": "object",
+              "required": ["scoreLimit"],
+              "properties": { "scoreLimit": { "type": "integer", "minimum": 1 } },
+              "additionalProperties": false
+            },
+            {
+              "type": "object",
+              "required": ["roundLimit"],
+              "properties": { "roundLimit": { "type": "integer", "minimum": 1 } },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "remixPolicy": { "$ref": "definitions.schema.json#/$defs/remixPolicy" }
+  },
+  "additionalProperties": false
+}
+

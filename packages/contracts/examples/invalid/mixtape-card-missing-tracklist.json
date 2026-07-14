@@ -1,0 +1,19 @@
+{
+  "schemaVersion": "0.1.0",
+  "card": {
+    "id": "bad_mixtape",
+    "kind": "mixtape_card",
+    "title": "Incomplete mixtape",
+    "slug": "incomplete-mixtape",
+    "status": "draft",
+    "visibility": "private",
+    "accessibleName": "Incomplete mixtape card"
+  },
+  "fields": {
+    "summary": { "dataType": "string", "value": "A set with no tracklist.", "source": "import" }
+  },
+  "classifications": [],
+  "surfaces": [{ "key": "card", "layoutMode": "fixed", "dimensions": { "width": 1, "height": 1, "unit": "px" }, "layers": [] }],
+  "permissions": [],
+  "metadata": {}
+}

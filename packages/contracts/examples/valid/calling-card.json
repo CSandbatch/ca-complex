@@ -1,0 +1,37 @@
+{
+  "schemaVersion": "0.1.0",
+  "card": {
+    "id": "card_calling_001",
+    "kind": "calling_card",
+    "title": "Nocturne calling card",
+    "slug": "nocturne-calling-card",
+    "status": "draft",
+    "visibility": "private",
+    "accessibleName": "A nocturne calling card with a raven emblem"
+  },
+  "fields": {
+    "message": { "dataType": "string", "value": "From the night archive", "source": "user", "visible": true },
+    "emblem": { "dataType": "asset_ref", "value": "asset_raven_001", "source": "user", "visible": true }
+  },
+  "classifications": [
+    { "scheme": "card-commons", "path": "communication/calling-card", "role": "primary" }
+  ],
+  "surfaces": [
+    {
+      "key": "card",
+      "layoutMode": "fixed",
+      "dimensions": { "width": 750, "height": 1050, "unit": "px" },
+      "background": { "color": "#11100f" },
+      "layers": [
+        { "id": "message", "kind": "text", "fieldKey": "message", "box": { "x": 90, "y": 700, "width": 570, "height": 160 }, "accessibleRole": "content" },
+        { "id": "emblem", "kind": "image", "fieldKey": "emblem", "box": { "x": 220, "y": 180, "width": 310, "height": 310 }, "accessibleRole": "image" }
+      ],
+      "accessibilityOrder": ["message", "emblem"]
+    }
+  ],
+  "assets": [{ "assetId": "asset_raven_001", "role": "emblem" }],
+  "permissions": [{ "principal": "owner", "actions": ["read", "edit", "publish", "remix", "admin"] }],
+  "remixPolicy": { "mode": "fork_with_attribution", "requireAttribution": true },
+  "metadata": {}
+}
+

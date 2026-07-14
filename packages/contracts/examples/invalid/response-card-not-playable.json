@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.1.0",
+  "card": {
+    "id": "bad_response",
+    "kind": "response_card",
+    "title": "Not playable",
+    "slug": "not-playable",
+    "status": "draft",
+    "visibility": "private",
+    "accessibleName": "Unplayable response"
+  },
+  "fields": {
+    "responseText": { "dataType": "string", "value": "No.", "source": "user" }
+  },
+  "classifications": [],
+  "surfaces": [{ "key": "game", "layoutMode": "game", "dimensions": { "width": 1, "height": 1, "unit": "px" }, "layers": [] }],
+  "gameData": { "role": "response", "playable": false },
+  "permissions": [],
+  "metadata": {}
+}
+

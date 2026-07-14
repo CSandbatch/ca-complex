@@ -1,0 +1,21 @@
+{
+  "schemaVersion": "0.1.0",
+  "card": {
+    "id": "bad_pass",
+    "kind": "pass_card",
+    "title": "Pass",
+    "slug": "pass",
+    "status": "draft",
+    "visibility": "private",
+    "accessibleName": "Pass card"
+  },
+  "fields": {
+    "message": { "dataType": "string", "value": "PASS", "source": "template" }
+  },
+  "classifications": [],
+  "surfaces": [],
+  "gameData": { "role": "pass", "playable": true },
+  "permissions": [],
+  "metadata": {}
+}
+

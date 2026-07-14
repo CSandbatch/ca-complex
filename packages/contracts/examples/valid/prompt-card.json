@@ -1,0 +1,32 @@
+{
+  "schemaVersion": "0.1.0",
+  "card": {
+    "id": "card_prompt_001",
+    "kind": "prompt_card",
+    "title": "A new web primitive",
+    "slug": "a-new-web-primitive",
+    "status": "draft",
+    "visibility": "workspace",
+    "accessibleName": "Prompt: The web was replaced by blank"
+  },
+  "fields": {
+    "promptText": { "dataType": "string", "value": "The web was replaced by ____.", "source": "user", "visible": true }
+  },
+  "classifications": [{ "scheme": "card-commons", "path": "game/prompt-response/prompt", "role": "game_role" }],
+  "surfaces": [
+    {
+      "key": "game",
+      "layoutMode": "game",
+      "dimensions": { "width": 600, "height": 840, "unit": "px" },
+      "background": { "color": "#151412" },
+      "layers": [
+        { "id": "prompt", "kind": "text", "fieldKey": "promptText", "box": { "x": 60, "y": 72, "width": 480, "height": 320 }, "accessibleRole": "content" }
+      ],
+      "accessibilityOrder": ["prompt"]
+    }
+  ],
+  "gameData": { "role": "prompt", "playable": true, "values": { "pickCount": 1 } },
+  "permissions": [{ "principal": "workspace:editors", "actions": ["read", "edit", "play"] }],
+  "metadata": {}
+}
+

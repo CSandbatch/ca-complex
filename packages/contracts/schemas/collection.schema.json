@@ -1,0 +1,39 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cardcommons.org/schemas/collection.schema.json",
+  "title": "Card collection",
+  "type": "object",
+  "required": ["id", "ownerId", "title", "slug", "kind", "visibility", "ordering", "memberships"],
+  "properties": {
+    "id": { "$ref": "definitions.schema.json#/$defs/id" },
+    "ownerId": { "$ref": "definitions.schema.json#/$defs/id" },
+    "workspaceId": { "$ref": "definitions.schema.json#/$defs/id" },
+    "title": { "type": "string", "minLength": 1 },
+    "slug": { "$ref": "definitions.schema.json#/$defs/slug" },
+    "kind": { "enum": ["stack", "deck", "series", "game"] },
+    "visibility": { "$ref": "definitions.schema.json#/$defs/visibility" },
+    "ordering": { "enum": ["manual", "chronological", "reverse_chronological", "random", "rule_based"] },
+    "description": { "type": "string" },
+    "memberships": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "cardId", "role", "addedAt", "addedBy"],
+        "properties": {
+          "id": { "$ref": "definitions.schema.json#/$defs/id" },
+          "cardId": { "$ref": "definitions.schema.json#/$defs/id" },
+          "position": { "type": "integer", "minimum": 0 },
+          "role": {
+            "enum": ["member", "cover", "episode", "prompt", "response", "rule", "source"]
+          },
+          "addedAt": { "$ref": "definitions.schema.json#/$defs/timestamp" },
+          "addedBy": { "$ref": "definitions.schema.json#/$defs/id" },
+          "metadata": { "type": "object", "additionalProperties": true }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "additionalProperties": false
+}
+
