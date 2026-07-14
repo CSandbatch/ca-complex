@@ -90,3 +90,14 @@ remote. Run before claiming a release-worthy state:
 
 This gate caught the line-ending drift that per-workspace gates structurally
 could not (they never see a foreign checkout).
+
+## Gap coverage
+
+Incompletenesses are tracked, not left to memory. In-repo, an impl marker
+(`# TODO:`, `// FIXME`) is the local signal. At the constellation level, known
+holes for this repo — deferred work, flaky gates, budget overages — are
+`fw:Gap` nodes in the ca-vault graph, about this repo's node. With the vault
+present, `scripts/scan_gaps.py --target ca-complex` scans this repo's source
+and reconciles markers against those declared gaps (advisory). Declare a known
+hole rather than leaving a bare marker; close it by clearing the marker and
+setting `fw:closed`.

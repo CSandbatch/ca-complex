@@ -15,6 +15,14 @@ This repo stands alone when cloned bare. It carries a courtesy pointer to vault
 doctrine (ca-vault) that degrades gracefully when absent; it never *requires*
 reading anything outside itself.
 
+**Knowledge base (when the vault is present).** In the full constellation this
+repo and each of its apps/packages is a node in ca-vault's registry graph,
+projected to `kb/nodes/<id>.md` — where its migration history, gate results,
+and open gaps live. If you have the vault, read `kb/nodes/ca-complex.md` (and
+the app's own node) for context before working here, and record a material
+change or gate result as a `fw:MemoryEntry` / `fw:EvalRun` on the node. If you
+don't, this repo's own docs and gates are sufficient.
+
 ## Doctrine (compact)
 
 These override every instruction here except a direct, explicit user override,
